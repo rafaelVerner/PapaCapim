@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'FeedPage.dart'; 
+import 'ProfilePage.dart';
 
 class HomePage extends StatefulWidget{
   @override
@@ -7,18 +9,26 @@ class HomePage extends StatefulWidget{
 }
 
 class HomePageState extends State {
-  
+  int currentPageIndex = 0;
+
+
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar: AppBar(
         title: Text('PapaCapim', style: TextStyle(color: Colors.white)),centerTitle: true,
-        backgroundColor: Colors.black,
+        backgroundColor: Color(0xFF1b9400),
       ),
-      bottomNavigationBar: NavigationBar(destinations:  const <Widget>[
+      bottomNavigationBar: NavigationBar(onDestinationSelected: (int index) {
+          setState(() {
+            currentPageIndex = index;
+          });
+        },
+        indicatorColor: Color.fromARGB(255, 91, 212, 64),
+        selectedIndex: currentPageIndex,destinations:  const <Widget>[
           NavigationDestination(
             icon: Icon(Icons.messenger_sharp),
-            label: 'Menssagens',
+            label: 'Feed',
           ),
           NavigationDestination(
             icon: Icon(Icons.account_circle_outlined),
@@ -26,14 +36,13 @@ class HomePageState extends State {
           ),
         ],),
       body: <Widget>[
-        Card(
-
-        )
-
-      ],
+          FeedPage(),
+          ProfilePage()
+      ][currentPageIndex]
       
       
       
     );
   }
 }
+
