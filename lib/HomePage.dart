@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'FeedPage.dart'; 
 import 'ProfilePage.dart';
+import 'NewPostPage.dart';
 
 class HomePage extends StatefulWidget{
   @override
@@ -27,8 +28,11 @@ class HomePageState extends State {
         indicatorColor: Color.fromARGB(255, 91, 212, 64),
         selectedIndex: currentPageIndex,destinations:  const <Widget>[
           NavigationDestination(
-            icon: Icon(Icons.messenger_sharp),
+            icon: Icon(Icons.dynamic_feed),
             label: 'Feed',
+          ),NavigationDestination(
+            icon: Icon(Icons.dynamic_feed),
+            label: 'New Post',
           ),
           NavigationDestination(
             icon: Icon(Icons.account_circle_outlined),
@@ -37,6 +41,7 @@ class HomePageState extends State {
         ],),
       body: <Widget>[
           FeedPage(),
+          NewPostPage(),
           ProfilePage()
       ][currentPageIndex]
       
