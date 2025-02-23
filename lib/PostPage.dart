@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 class PostPage extends StatefulWidget{
+  final Map<String, String> map;
+  const PostPage({super.key, required this.map});
   @override
   State<StatefulWidget> createState() {
     return PostPageState();
   }
 }
 
-class PostPageState extends State{
+class PostPageState extends State<PostPage>{
   bool isLiked = false;
 
 
@@ -25,8 +27,8 @@ class PostPageState extends State{
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(padding: EdgeInsets.fromLTRB(10, 10, 0, 0), child: Text('Nome_Usuário \n', style: TextStyle(fontSize: 18)),),
-                Padding(padding: EdgeInsets.fromLTRB(10, 10, 0, 0), child: Text('"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eget ligula eu lectus lobortis condimentum. Aliquam nonummy auctor massa. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla at risus. Quisque purus magna, auctor et, sagittis ac, posuere eu, lectus. Nam mattis, felis ut adipiscing."'),),
+                Padding(padding: EdgeInsets.fromLTRB(10, 10, 0, 0), child: Text(widget.map['nome'] ?? '', style: TextStyle(fontSize: 18)),),
+                Padding(padding: EdgeInsets.fromLTRB(10, 10, 0, 0), child: Text(widget.map['post'] ?? '')),
                 Row(
                 children: [
                   Spacer(),

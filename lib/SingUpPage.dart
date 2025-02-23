@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget{
-  final Function() indexPage;
-  const LoginPage({super.key, required this.indexPage});
   @override
   State<StatefulWidget> createState() => LoginPageState();
 
@@ -57,15 +55,13 @@ class LoginPageState extends State{
                   Padding(padding: EdgeInsets.all(10), 
                     child:ElevatedButton(
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                      onPressed: (){
-                        
-                      }, 
-                      child: Text("Entrar", style: TextStyle(color: Colors.white)))) ,
+                      onPressed: (){}, 
+                      child: Text("Cadastrar", style: TextStyle(color: Colors.white)))) ,
                   Padding(padding: EdgeInsets.all(10), 
                     child: ElevatedButton( 
                         style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                         onPressed: (){},
-                        child: Text("Cadastrar", style: TextStyle(color: Colors.white))))
+                        child: Text("Entrar", style: TextStyle(color: Colors.white))))
                 ],
               )
         ],
