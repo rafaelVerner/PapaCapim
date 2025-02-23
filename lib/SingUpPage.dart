@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget{
+class SingUpPage extends StatefulWidget{
   @override
-  State<StatefulWidget> createState() => LoginPageState();
+  State<StatefulWidget> createState() => SingUpPageState();
 
 }
 
-class LoginPageState extends State{
+class SingUpPageState extends State<SingUpPage>{
   final  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,21 @@ class LoginPageState extends State{
                 Padding(padding: EdgeInsets.fromLTRB(20, 0, 20, 20), child: 
                   TextFormField(
                     decoration: InputDecoration(
-                      labelText: 'Email ou Nome do usuário',
+                      labelText: 'Nome de usuário',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Campo obrigatório';
+                      }
+                      return null;
+                    },
+                ),
+              ),
+                Padding(padding: EdgeInsets.fromLTRB(20, 0, 20, 20), child: 
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Email',
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
@@ -60,7 +74,9 @@ class LoginPageState extends State{
                   Padding(padding: EdgeInsets.all(10), 
                     child: ElevatedButton( 
                         style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                        onPressed: (){},
+                        onPressed: (){
+
+                        },
                         child: Text("Entrar", style: TextStyle(color: Colors.white))))
                 ],
               )

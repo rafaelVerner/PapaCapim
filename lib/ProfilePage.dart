@@ -20,7 +20,7 @@ class ProfilePageState extends State<ProfilePage>{
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Editar Perfil"),
+          title: const Text("Editar Perfil", style: TextStyle(color: Colors.white),),
           backgroundColor: Colors.grey[900],
           content: Column(
             mainAxisSize: MainAxisSize.min,

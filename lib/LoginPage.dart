@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget{
-  final Function() indexPage;
-  const LoginPage({super.key, required this.indexPage});
+  
   @override
   State<StatefulWidget> createState() => LoginPageState();
 
 }
 
-class LoginPageState extends State{
+class LoginPageState extends State<LoginPage>{
   final  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget{
 
 }
 
-class HomePageState extends State {
+class HomePageState extends State<HomePage> {
   int currentPageIndex = 0;
   
   void goTo(int index){
