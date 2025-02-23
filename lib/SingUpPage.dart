@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class SingUpPage extends StatefulWidget{
+  final Function(int) changePage;
+  final Function(String, String, String) singUp;
+  const SingUpPage({super.key, required this.changePage, required this.singUp});
   @override
   State<StatefulWidget> createState() => SingUpPageState();
 
@@ -8,6 +11,8 @@ class SingUpPage extends StatefulWidget{
 
 class SingUpPageState extends State<SingUpPage>{
   final  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  String? name, email, password;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,6 +29,9 @@ class SingUpPageState extends State<SingUpPage>{
                       labelText: 'Nome de usuário',
                       border: OutlineInputBorder(),
                     ),
+                    onSaved: (value) => setState(() {
+                      name = value;
+                    }),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Campo obrigatório';
@@ -38,6 +46,9 @@ class SingUpPageState extends State<SingUpPage>{
                       labelText: 'Email',
                       border: OutlineInputBorder(),
                     ),
+                    onSaved: (value) => setState(() {
+                      email = value;
+                    }),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Campo obrigatório';
@@ -52,6 +63,9 @@ class SingUpPageState extends State<SingUpPage>{
                       labelText: 'Senha',
                       border: OutlineInputBorder(),
                     ),
+                    onSaved: (value) => setState(() {
+                      password = value;
+                    }),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Campo obrigatório';
@@ -69,13 +83,19 @@ class SingUpPageState extends State<SingUpPage>{
                   Padding(padding: EdgeInsets.all(10), 
                     child:ElevatedButton(
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                      onPressed: (){}, 
+                      onPressed: (){
+                        if(formKey.currentState!.validate()){
+                          formKey.currentState!.save();
+                          widget.singUp(name!, email!, password!);
+                          widget.changePage(0);
+                        }
+                      }, 
                       child: Text("Cadastrar", style: TextStyle(color: Colors.white)))) ,
                   Padding(padding: EdgeInsets.all(10), 
                     child: ElevatedButton( 
                         style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                         onPressed: (){
-
+                          widget.changePage(0);
                         },
                         child: Text("Entrar", style: TextStyle(color: Colors.white))))
                 ],

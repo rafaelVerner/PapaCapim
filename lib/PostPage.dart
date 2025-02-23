@@ -43,12 +43,6 @@ class PostPageState extends State<PostPage>{
                     size: 30,
                     ), 
                   ),
-                  IconButton(onPressed: (){},
-                  icon: Icon(
-                    Icons.send,
-                    size: 30,
-                    ), 
-                  ),
                 ],
             )]),
           ),

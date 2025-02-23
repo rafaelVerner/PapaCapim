@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget{
+  final Function(int) changePage;
+
+  const ProfilePage({super.key, required this.changePage});
+
   @override
   State<StatefulWidget> createState() {
     return ProfilePageState();
