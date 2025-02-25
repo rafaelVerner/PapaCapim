@@ -3,7 +3,8 @@ import 'MyPostPage.dart';
 
 class ProfilePostPage extends StatefulWidget{
   final List<Map<String, String>> posts;
-  const ProfilePostPage({super.key, required this.posts});
+  final Function(Map<String, String> ) deletePost;
+  const ProfilePostPage({super.key, required this.posts, required this.deletePost});
   @override
   State<StatefulWidget> createState() {
     return PostPageState();
@@ -30,7 +31,7 @@ class PostPageState extends State<ProfilePostPage>{
             title: Text(post['nome']!),
             subtitle: Text(post['post']!),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> MyPostPage(map: post,)));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> MyPostPage(map: post, deletePost: widget.deletePost,)));
             },
           )
         )

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class MyPostPage extends StatefulWidget{
   final Map<String, String> map;
-  const MyPostPage({super.key, required this.map});
+  final Function(Map<String, String> ) deletePost;
+  const MyPostPage({super.key, required this.map, required this.deletePost});
   @override
   State<StatefulWidget> createState() {
     return PostPageState();
@@ -33,6 +34,8 @@ class PostPageState extends State<MyPostPage>{
                 children: [
                   Spacer(),
                   IconButton(onPressed: (){
+                      widget.deletePost(widget.map);
+                      Navigator.pop(context);
                     },
                   icon: Icon(Icons.delete), 
                   ),

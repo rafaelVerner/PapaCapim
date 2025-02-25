@@ -8,7 +8,8 @@ class ProfilePage extends StatefulWidget{
   final Function(String, List) getProfilePost;
   final List<Map<String, String>> lista;
   final Map<String, String> profile;
-  const ProfilePage({super.key, required this.changePage, required this.exit, required this.getProfilePost, required this.lista, required this.profile, });
+  final Function(Map<String, String> ) deletePost;
+  const ProfilePage({super.key, required this.changePage, required this.exit, required this.getProfilePost, required this.lista, required this.profile, required this.deletePost, });
 
   @override
   State<StatefulWidget> createState() {
@@ -119,7 +120,7 @@ class ProfilePageState extends State<ProfilePage>{
                 Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 0))
                 ,
                 ElevatedButton(onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> ProfilePostPage(posts: widget.getProfilePost(widget.profile['nome']!, widget.lista))));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> ProfilePostPage(posts: widget.getProfilePost(widget.profile['nome']!, widget.lista), deletePost: widget.deletePost,)));
                 }, 
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                   child: const Text("Meus posts",style: TextStyle(color: Colors.white),),

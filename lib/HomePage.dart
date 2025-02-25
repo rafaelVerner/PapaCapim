@@ -69,6 +69,14 @@ class HomePageState extends State<HomePage> {
       index = newIndex;
     });
   }
+
+  void deletePost(Map<String, String> myPost){
+    for (var post in lista){
+      if(post == myPost){
+        lista.remove(myPost);
+      }
+    }
+  }
   
   void singUp(String nome, String email, String password){
     profiles.add({'nome':nome, 'email': email, 'password': password});
@@ -90,7 +98,7 @@ class HomePageState extends State<HomePage> {
   
   @override
   Widget build(BuildContext context) {
-    List<Widget> pages = [LoginPage(login: login, changePage: changePage), ProfilePage( changePage: changePage, exit: exit, getProfilePost: getProfilePost, lista: lista, profile: profileLoged ?? {},), SingUpPage( changePage: changePage, singUp: singUp,)];
+    List<Widget> pages = [LoginPage(login: login, changePage: changePage), ProfilePage( changePage: changePage, exit: exit, getProfilePost: getProfilePost, lista: lista, profile: profileLoged ?? {}, deletePost: deletePost ), SingUpPage( changePage: changePage, singUp: singUp,)];
     return  Scaffold(
       appBar: AppBar(
         title: Text('PapaCapim', style: TextStyle(color: Colors.white)),centerTitle: true,
