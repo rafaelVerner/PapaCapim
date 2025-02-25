@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 class NewPostPage extends StatefulWidget{
   final Function(String, String) newPost;
   final Function(int) goTo;
-  const NewPostPage({super.key, required this.newPost, required this.goTo});
+  final bool  isLoged;
+  final Map<String, String> profileLoged;
+  const NewPostPage({super.key, required this.newPost, required this.goTo, required this.isLoged, required this.profileLoged});
   
   @override
   State<StatefulWidget> createState() {
@@ -15,13 +17,18 @@ class NewPostPageState extends State<NewPostPage>{
 final  GlobalKey<FormState> formKey = GlobalKey<FormState>();
 String? post;
 
+@override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    setState(() {}); // Força a reconstrução sempre que a página for aberta
+  }
 
 void _submitForm() {
     if (formKey.currentState!.validate()) {
-      formKey.currentState!.save(); // Salva os valores dos campos
+      formKey.currentState!.save(); 
 
       if (post != null && post!.isNotEmpty) {
-        widget.newPost("teste", post!);
+        widget.newPost(widget.profileLoged['nome']!, post!);
       }
       widget.goTo(0);
     }
@@ -29,7 +36,7 @@ void _submitForm() {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+     if(widget.isLoged){return Card(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [Form(
@@ -75,5 +82,10 @@ void _submitForm() {
 
       ),
     );
+    }else{
+      return Center(
+        child: Text('Faça login para postar!', style: TextStyle(fontSize: 20),),
+      );       
+    }
   }
 }

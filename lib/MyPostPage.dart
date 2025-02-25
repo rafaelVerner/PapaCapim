@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class PostPage extends StatefulWidget{
+class MyPostPage extends StatefulWidget{
   final Map<String, String> map;
-  const PostPage({super.key, required this.map});
+  const MyPostPage({super.key, required this.map});
   @override
   State<StatefulWidget> createState() {
     return PostPageState();
   }
 }
 
-class PostPageState extends State<PostPage>{
+class PostPageState extends State<MyPostPage>{
   bool isLiked = false;
 
 
@@ -33,18 +33,10 @@ class PostPageState extends State<PostPage>{
                 children: [
                   Spacer(),
                   IconButton(onPressed: (){
-                      setState(() {
-                        isLiked = !isLiked;
-                      });
                     },
-                  icon: Icon(
-                    isLiked ? Icons.favorite : Icons.favorite_border,
-                    color: isLiked ? Colors.red : Colors.grey,
-                    size: 30,
-                    ), 
+                  icon: Icon(Icons.delete), 
                   ),
-                  IconButton(onPressed: (){
-                    },
+                  IconButton(onPressed: (){},
                   icon: Icon(
                     Icons.send,
                     size: 30,

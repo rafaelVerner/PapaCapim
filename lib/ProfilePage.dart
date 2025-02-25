@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
+import 'ProfilePostPage.dart';
+
 class ProfilePage extends StatefulWidget{
   final Function(int) changePage;
-
-  const ProfilePage({super.key, required this.changePage});
+  final Function() exit;
+  final Function(String, List) getProfilePost;
+  final List<Map<String, String>> lista;
+  final Map<String, String> profile;
+  const ProfilePage({super.key, required this.changePage, required this.exit, required this.getProfilePost, required this.lista, required this.profile, });
 
   @override
   State<StatefulWidget> createState() {
@@ -14,11 +19,14 @@ class ProfilePage extends StatefulWidget{
 class ProfilePageState extends State<ProfilePage>{
   String userName = "Usuário Exemplo";
   String userBio = "A vida é uma jornada, aproveite cada momento!";
-  
+  String userEmail = "exemplo_email@papacapim.com";
+  String userSenha = "********";
 
   void editProfile() {
     TextEditingController nameController = TextEditingController(text: userName);
     TextEditingController bioController = TextEditingController(text: userBio);
+    TextEditingController emailController = TextEditingController(text: userEmail);
+    TextEditingController senhaController = TextEditingController(text: userSenha);
 
     showDialog(
       context: context,
@@ -42,6 +50,22 @@ class ProfilePageState extends State<ProfilePage>{
                 style: const TextStyle(color: Colors.white),
                 decoration: const InputDecoration(
                   labelText: "Bio",
+                  labelStyle: TextStyle(color: Colors.white54),
+                ),
+              ),
+              TextField(
+                controller: emailController,
+                style: const TextStyle(color: Colors.white),
+                decoration: const InputDecoration(
+                  labelText: "E-mail",
+                  labelStyle: TextStyle(color: Colors.white54),
+                ),
+              ),
+                TextField(
+                controller: senhaController,
+                style: const TextStyle(color: Colors.white),
+                decoration: const InputDecoration(
+                  labelText: "Senha",
                   labelStyle: TextStyle(color: Colors.white54),
                 ),
               ),
@@ -84,10 +108,33 @@ class ProfilePageState extends State<ProfilePage>{
             Text(userName, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             Text(userBio, style: const TextStyle(fontSize: 14)),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: editProfile,
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-              child: const Text("Editar Perfil",style: TextStyle(color: Colors.white),),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: editProfile,
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                  child: const Text("Editar Perfil",style: TextStyle(color: Colors.white),),
+                ),
+                Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 0))
+                ,
+                ElevatedButton(onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> ProfilePostPage(posts: widget.getProfilePost(widget.profile['nome']!, widget.lista))));
+                }, 
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                  child: const Text("Meus posts",style: TextStyle(color: Colors.white),),
+                )
+              ],
+            ),
+            
+            Padding(padding: EdgeInsets.all(10)),
+             ElevatedButton(
+              onPressed: (){
+                widget.exit();
+                widget.changePage(0);
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
+              child: const Text("Sair",style: TextStyle(color: Colors.red),),
             ),
           ],
         ),

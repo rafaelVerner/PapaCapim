@@ -4,6 +4,7 @@ import 'PostPage.dart';
 
 class FeedPage extends StatefulWidget{
   final List<Map<String, String>> lista;
+
   const FeedPage({super.key, required this.lista});
 
   @override

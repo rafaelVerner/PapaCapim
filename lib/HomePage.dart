@@ -13,9 +13,10 @@ class HomePage extends StatefulWidget{
 
 class HomePageState extends State<HomePage> {
   int currentPageIndex = 0, index = 0;
-  List<Map<String, String>> lista = [{}];
-  List<Map<String, String>> profiles = [{}];
-
+  List<Map<String, String>> lista = [];
+  List<Map<String, String>> profiles = [];
+  bool isLoged = false;
+  Map<String, String>? profileLoged;
 
   void goTo(int index){
     setState(() {
@@ -30,6 +31,8 @@ class HomePageState extends State<HomePage> {
         setState(() {
           index = 1;
           flag = true;
+          isLoged = true;
+          profileLoged = profile;
         });
       }
     }
@@ -54,6 +57,13 @@ class HomePageState extends State<HomePage> {
     }
   } 
 
+  void exit(){
+    setState(() {
+      profileLoged = {};
+      isLoged = false;
+    });
+  }
+
   void changePage(int newIndex){
     setState(() {
       index = newIndex;
@@ -67,10 +77,20 @@ class HomePageState extends State<HomePage> {
   void newPost(String nome, String post) => setState(() {
     lista.add({'nome': nome,'post': post});
   });
+
+  List<Map<String, String>> getProfilePost(String nome, List lista){
+    List<Map<String, String>> profilePosts = [];
+    for(var post in lista){
+      if(post['nome'] == nome){
+        profilePosts.add(post);
+      }
+    }
+    return profilePosts;
+  }
   
   @override
   Widget build(BuildContext context) {
-    List<Widget> pages = [LoginPage(login: login, changePage: changePage), ProfilePage( changePage: changePage,), SingUpPage( changePage: changePage, singUp: singUp,)];
+    List<Widget> pages = [LoginPage(login: login, changePage: changePage), ProfilePage( changePage: changePage, exit: exit, getProfilePost: getProfilePost, lista: lista, profile: profileLoged ?? {},), SingUpPage( changePage: changePage, singUp: singUp,)];
     return  Scaffold(
       appBar: AppBar(
         title: Text('PapaCapim', style: TextStyle(color: Colors.white)),centerTitle: true,
@@ -98,9 +118,9 @@ class HomePageState extends State<HomePage> {
         ],),
       body: <Widget>[
           FeedPage(lista: lista),
-          NewPostPage(newPost: newPost, goTo: goTo),
+          NewPostPage(key: ValueKey(isLoged), newPost: newPost, goTo: goTo, isLoged: isLoged, profileLoged: profileLoged ?? {},),
           pages[index]
-      ][currentPageIndex.clamp(0, 2)]
+        ][currentPageIndex.clamp(0, 2)],
       
       
       
