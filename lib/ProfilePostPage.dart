@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'MyPostPage.dart';
 
 class ProfilePostPage extends StatefulWidget{
-  final List<Map<String, String>> posts;
-  final Function(Map<String, String> ) deletePost;
-  const ProfilePostPage({super.key, required this.posts, required this.deletePost});
+  const ProfilePostPage({super.key});
   @override
   State<StatefulWidget> createState() {
     return PostPageState();
@@ -23,7 +21,7 @@ class PostPageState extends State<ProfilePostPage>{
         backgroundColor: Color(0xFF1b9400),
         ),
       body: ListView(
-      children: [ 
+      children: [/* 
         for(var post in widget.posts)
         if(post.isNotEmpty)
         Card(
@@ -35,7 +33,7 @@ class PostPageState extends State<ProfilePostPage>{
             },
           )
         )
-      ],
+      */],
       ),
       );
   }

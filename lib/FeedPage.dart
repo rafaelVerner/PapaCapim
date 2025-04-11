@@ -17,13 +17,14 @@ class FeedPage extends StatefulWidget {
 }
 
 class FeedPageState extends State<FeedPage> {
+
+  
   Future<List<dynamic>> getFeed() async {
     var client = http.Client();
     try {
       http.Response? res = await client.get(
         Uri.parse(widget.url + '/posts'),
       );
-
       return json.decode(res.body);
     } catch (e) {
       return Future.error(e.toString());

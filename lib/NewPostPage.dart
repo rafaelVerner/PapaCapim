@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class NewPostPage extends StatefulWidget{
-  final Function(String, String) newPost;
+
   final Function(int) goTo;
   final bool  isLoged;
   final Map<String, String> profileLoged;
-  const NewPostPage({super.key, required this.newPost, required this.goTo, required this.isLoged, required this.profileLoged});
+  const NewPostPage({super.key, required this.goTo, required this.isLoged, required this.profileLoged});
   
   @override
   State<StatefulWidget> createState() {
@@ -20,16 +20,16 @@ String? post;
 @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    setState(() {}); // Força a reconstrução sempre que a página for aberta
+    setState(() {});
   }
 
 void _submitForm() {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save(); 
 
-      if (post != null && post!.isNotEmpty) {
-        widget.newPost(widget.profileLoged['nome']!, post!);
-      }
+      //if (post != null && post!.isNotEmpty) {
+        //widget.newPost(widget.profileLoged['nome']!, post!);
+      //}
       widget.goTo(0);
     }
   }

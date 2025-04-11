@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PostPage extends StatefulWidget{
-  final Map<String, String> map;
+  final Map<String, dynamic> map;
   const PostPage({super.key, required this.map});
   @override
   State<StatefulWidget> createState() {

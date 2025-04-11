@@ -5,11 +5,9 @@ import 'ProfilePostPage.dart';
 class ProfilePage extends StatefulWidget{
   final Function(int) changePage;
   final Function() exit;
-  final Function(String, List) getProfilePost;
   final List<Map<String, String>> lista;
   final Map<String, String> profile;
-  final Function(Map<String, String> ) deletePost;
-  const ProfilePage({super.key, required this.changePage, required this.exit, required this.getProfilePost, required this.lista, required this.profile, required this.deletePost, });
+  const ProfilePage({super.key, required this.changePage, required this.exit, required this.lista, required this.profile });
 
   @override
   State<StatefulWidget> createState() {
@@ -120,7 +118,7 @@ class ProfilePageState extends State<ProfilePage>{
                 Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 0))
                 ,
                 ElevatedButton(onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> ProfilePostPage(posts: widget.getProfilePost(widget.profile['nome']!, widget.lista), deletePost: widget.deletePost,)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> ProfilePostPage()));
                 }, 
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                   child: const Text("Meus posts",style: TextStyle(color: Colors.white),),

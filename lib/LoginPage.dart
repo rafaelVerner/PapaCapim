@@ -3,27 +3,41 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class LoginPage extends StatefulWidget {
-  final Function(String, String) login; //Isso vai embora
+class LoginPage extends StatefulWidget {  
   final Function(int) changePage;
   final String url;
   const LoginPage(
       {super.key,
-      required this.login,
       required this.changePage,
-      required this.url});
+      required this.url,});
   @override
   State<StatefulWidget> createState() => LoginPageState();
 }
 
 class LoginPageState extends State<LoginPage> {
+
   void post(BuildContext context) async {
     var client = http.Client();
+
     try {
-      await client.post(Uri.parse(widget.url + '/sessions'),
-          body: json.encode({"login": userName, "password": password}));
-    } catch (e) {}
+      final response = await client.post(
+        Uri.parse(widget.url + '/sessions'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          "login": userName,
+          "password": password,
+        }),
+      );
+
+    } catch (e) {
+      print('Erro na requisição: $e');
+    } finally {
+      client.close(); // Sempre bom fechar
+    }
   }
+
+
+
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String? userName, password;
@@ -86,6 +100,7 @@ class LoginPageState extends State<LoginPage> {
                         if (formKey.currentState!.validate()) {
                           formKey.currentState!.save();
                           post(context);
+                          
                         }
                       },
                       child: Text("Entrar",

@@ -6,12 +6,10 @@ import 'package:http/http.dart' as http;
 
 class SingUpPage extends StatefulWidget {
   final Function(int) changePage;
-  final Function(String, String, String) singUp; //tirar isso aqui depois
   final String url;
   const SingUpPage(
       {super.key,
       required this.changePage,
-      required this.singUp,
       required this.url});
   @override
   State<StatefulWidget> createState() => SingUpPageState();
@@ -115,6 +113,8 @@ class SingUpPageState extends State<SingUpPage> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Campo obrigatório';
+                          }else if(value != password){
+                            return 'Senhas diferentes!';
                           }
                           return null;
                         },
