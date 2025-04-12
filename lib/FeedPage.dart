@@ -8,7 +8,8 @@ import 'package:http/http.dart' as http;
 class FeedPage extends StatefulWidget {
   final List<Map<String, String>> lista; //tirar isso aqui depois
   final String url;
-  const FeedPage({super.key, required this.lista, required this.url});
+  final String token;
+  const FeedPage({super.key, required this.lista, required this.url, required this.token});
 
   @override
   State<StatefulWidget> createState() {
@@ -24,6 +25,7 @@ class FeedPageState extends State<FeedPage> {
     try {
       http.Response? res = await client.get(
         Uri.parse(widget.url + '/posts'),
+        headers: {'x-session-token': widget.token}
       );
       return json.decode(res.body);
     } catch (e) {

@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:papacapim/LoginPage.dart';
 import 'FeedPage.dart';
 import 'ProfilePage.dart';
 import 'NewPostPage.dart';
 import 'SingUpPage.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   @override
@@ -15,9 +18,9 @@ class HomePageState extends State<HomePage> {
   List<Map<String, String>> lista = []; //Isso vai embora
   List<Map<String, String>> profiles = []; //Isso vai sumir tbm
   bool isLoged = false;
-  Map<String, String>? profileLoged;
+  Map<String, String>? profileLoged; // N sei se vou usar isso ainda
   String url = 'https://api.papacapim.just.pro.br';
- 
+  String? token;
 
 //Essa função fica
   void goTo(int index) {
@@ -43,6 +46,32 @@ class HomePageState extends State<HomePage> {
     });
   }
 
+  void login(BuildContext context, String userName, String password) async {
+    var client = http.Client();
+
+    try {
+      final response = await client.post(
+        Uri.parse(url + '/sessions'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          "login": userName,
+          "password": password,
+        }),
+      );
+
+      if(response.statusCode == 200){
+        setState(() {
+          token = json.decode(response.body)['token'];
+        });
+        
+      }
+
+    } catch (e) {
+      print('Erro na requisição: $e');
+    } finally {
+      client.close(); // Sempre bom fechar
+    }
+  }
 
 
 
@@ -50,7 +79,7 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     List<Widget> pages = [
-      LoginPage( changePage: changePage, url: url),
+      LoginPage( changePage: changePage, url: url, login: login),
       ProfilePage(
           changePage: changePage,
           exit: exit,
@@ -91,7 +120,7 @@ class HomePageState extends State<HomePage> {
         ],
       ),
       body: <Widget>[
-        FeedPage(lista: lista, url: url),
+        FeedPage(lista: lista, url: url, token: token ?? ''),
         NewPostPage(
           key: ValueKey(isLoged),
           goTo: goTo,
