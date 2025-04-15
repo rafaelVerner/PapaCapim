@@ -9,6 +9,9 @@ class PostPage extends StatefulWidget{
   }
 }
 
+//Nessa página precisa modificar o botão de like e o botão de responder a mensagem
+//Bom crira uma collun com outra list view para colocar as respostas do post em baixo dele
+
 class PostPageState extends State<PostPage>{
   bool isLiked = false;
 
@@ -27,8 +30,8 @@ class PostPageState extends State<PostPage>{
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(padding: EdgeInsets.fromLTRB(10, 10, 0, 0), child: Text(widget.map['nome'] ?? '', style: TextStyle(fontSize: 18)),),
-                Padding(padding: EdgeInsets.fromLTRB(10, 10, 0, 0), child: Text(widget.map['post'] ?? '')),
+                Padding(padding: EdgeInsets.fromLTRB(10, 10, 0, 0), child: Text(widget.map['user_login'] ?? '', style: TextStyle(fontSize: 18)),),
+                Padding(padding: EdgeInsets.fromLTRB(10, 10, 0, 0), child: Text(widget.map['message'] ?? '')),
                 Row(
                 children: [
                   Spacer(),

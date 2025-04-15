@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'MyPostPage.dart';
 
 class ProfilePostPage extends StatefulWidget{
   const ProfilePostPage({super.key});

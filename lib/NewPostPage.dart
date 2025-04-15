@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class NewPostPage extends StatefulWidget{
 
   final Function(int) goTo;
-  final bool  isLoged;
-  final Map<String, String> profileLoged;
-  const NewPostPage({super.key, required this.goTo, required this.isLoged, required this.profileLoged});
+  final Map<String, dynamic> profileLoged;
+  final String token;
+  const NewPostPage({super.key, required this.goTo, required this.profileLoged, required this.token});
   
   @override
   State<StatefulWidget> createState() {
@@ -36,7 +36,7 @@ void _submitForm() {
 
   @override
   Widget build(BuildContext context) {
-     if(widget.isLoged){return Card(
+     if(widget.token != ''){return Card(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [Form(
@@ -67,7 +67,9 @@ void _submitForm() {
                   Padding(padding: EdgeInsets.all(10), 
                     child:ElevatedButton(
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                      onPressed: ()=> _submitForm(), 
+                      onPressed: (){
+                        _submitForm();
+                      }, 
                       child: Text("Enviar", style: TextStyle(color: Colors.white)))) ,
                   Padding(padding: EdgeInsets.all(10), 
                     child: ElevatedButton( 
@@ -84,7 +86,7 @@ void _submitForm() {
     );
     }else{
       return Center(
-        child: Text('Faça login para postar!', style: TextStyle(fontSize: 20),),
+        child: Text('Faça login para postar!', style: TextStyle(fontSize: 20)),
       );       
     }
   }

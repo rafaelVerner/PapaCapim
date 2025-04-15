@@ -1,15 +1,14 @@
-import 'dart:convert';
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'PostPage.dart';
-import 'package:http/http.dart' as http;
 
 class FeedPage extends StatefulWidget {
-  final List<Map<String, String>> lista; //tirar isso aqui depois
   final String url;
+  final Future<List<dynamic>> Function() getFeed;
   final String token;
-  const FeedPage({super.key, required this.lista, required this.url, required this.token});
+  const FeedPage({super.key, required this.url, required this.token, required this.getFeed});
 
   @override
   State<StatefulWidget> createState() {
@@ -18,48 +17,94 @@ class FeedPage extends StatefulWidget {
 }
 
 class FeedPageState extends State<FeedPage> {
-
-  
-  Future<List<dynamic>> getFeed() async {
-    var client = http.Client();
-    try {
-      http.Response? res = await client.get(
-        Uri.parse(widget.url + '/posts'),
-        headers: {'x-session-token': widget.token}
-      );
-      return json.decode(res.body);
-    } catch (e) {
-      return Future.error(e.toString());
-    }
-  }
-
+  String search = '';
+  final TextEditingController controller = TextEditingController();
+ 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: getFeed(),
+        future: widget.getFeed(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return ListView(
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                for (var post in snapshot.data!)
-                  if (post.isNotEmpty)
-                    Card(
-                        child: ListTile(
-                      title: Text(post['user_login']!),
-                      subtitle: Text(post['message']!),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PostPage(
-                                      map: post,
-                                    )));
-                      },
-                    ))
+                 Container(
+                  margin: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(color: Colors.grey.shade300),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        spreadRadius: 1,
+                        blurRadius: 6,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: 
+                          TextField(
+                            controller: controller,
+                            decoration: const InputDecoration(
+                              hintText: "Pesquisar...",
+                              border: InputBorder.none,
+                            ),
+                        ),   
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.search, color: Colors.grey),
+                        onPressed: () {
+                          setState(() {
+                            search = controller.text;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(child: 
+                  ListView(
+                  children: [
+                    for (var post in snapshot.data!)
+                      if (post.isNotEmpty)
+                        if(search == '')
+                          Card(
+                              child: ListTile(
+                            title: Text(post['user_login']!),
+                            subtitle: Text(post['message']!),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PostPage(map: post,
+                                          )));
+                            },
+                          ))
+                        else if (post['user_login']!.toString().toLowerCase().contains(search) || post['message']!.toString().toLowerCase().contains(search))
+                          Card(
+                              child: ListTile(
+                            title: Text(post['user_login']!),
+                            subtitle: Text(post['message']!),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PostPage(map: post,
+                                          )));
+                            }
+                              )
+                          )
+                    ],
+                  )
+                )
               ],
             );
-          } else if (snapshot.hasError) {
-            return Center(child: Text('${snapshot.error}'));
           } else {
             return const Center(
                 child: CircularProgressIndicator(

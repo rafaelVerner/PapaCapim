@@ -16,9 +16,10 @@ class LoginPage extends StatefulWidget {
 class LoginPageState extends State<LoginPage> {
 
   
-
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String? userName, password;
+  
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +79,7 @@ class LoginPageState extends State<LoginPage> {
                         if (formKey.currentState!.validate()) {
                           formKey.currentState!.save();
                           widget.login(context, userName!, password!);
-                          
+                          widget.changePage(1);
                         }
                       },
                       child: Text("Entrar",

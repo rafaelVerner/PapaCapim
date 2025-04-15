@@ -5,9 +5,8 @@ import 'ProfilePostPage.dart';
 class ProfilePage extends StatefulWidget{
   final Function(int) changePage;
   final Function() exit;
-  final List<Map<String, String>> lista;
-  final Map<String, String> profile;
-  const ProfilePage({super.key, required this.changePage, required this.exit, required this.lista, required this.profile });
+  final Map<String, dynamic> profile;
+  const ProfilePage({super.key, required this.changePage, required this.exit, required this.profile });
 
   @override
   State<StatefulWidget> createState() {
@@ -16,6 +15,17 @@ class ProfilePage extends StatefulWidget{
 }
 
 class ProfilePageState extends State<ProfilePage>{
+  /*
+    Vou deixar essa parte pra tu fazer.
+    
+    Aqui precisa passar os valores do Map profile para os campos,
+    ou seja, tu vai pegar a variável profile, que recebe a resposta json 
+    do login, e no lugar dessas variáveis que tu criou tu vai botar os  
+    valores do profile.
+  
+  */ 
+
+
   String userName = "Usuário Exemplo";
   String userBio = "A vida é uma jornada, aproveite cada momento!";
   String userEmail = "exemplo_email@papacapim.com";

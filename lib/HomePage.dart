@@ -6,6 +6,7 @@ import 'FeedPage.dart';
 import 'ProfilePage.dart';
 import 'NewPostPage.dart';
 import 'SingUpPage.dart';
+import 'UsersPage.dart';
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
@@ -14,13 +15,17 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  int currentPageIndex = 2, index = 0;
-  List<Map<String, String>> lista = []; //Isso vai embora
-  List<Map<String, String>> profiles = []; //Isso vai sumir tbm
-  bool isLoged = false;
-  Map<String, String>? profileLoged; // N sei se vou usar isso ainda
+  int currentPageIndex = 3, index = 0;
+  Map<String, dynamic>? profileLoged; // N sei se vou usar isso ainda
   String url = 'https://api.papacapim.just.pro.br';
   String? token;
+
+/*
+
+      =========Funções=========
+
+*/
+
 
 //Essa função fica
   void goTo(int index) {
@@ -29,14 +34,27 @@ class HomePageState extends State<HomePage> {
     });
   }
 
-
-
 //Essa função fica
-  void exit() {
-    setState(() {
-      profileLoged = {};
-      isLoged = false;
-    });
+  void exit() async{
+    var client = http.Client();
+    try{
+      final response = await client.delete(
+        Uri.parse(url + '/sessions/1'),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-session-token': token ?? ''
+          }
+        );
+      
+        setState(() {
+          profileLoged = {};
+          token = '';
+        });
+      
+    }catch(e){
+       print('Erro na requisição: $e');
+    }
+    
   }
 
 //Essa função fica
@@ -62,6 +80,7 @@ class HomePageState extends State<HomePage> {
       if(response.statusCode == 200){
         setState(() {
           token = json.decode(response.body)['token'];
+          profileLoged = json.decode(response.body);
         });
         
       }
@@ -69,11 +88,41 @@ class HomePageState extends State<HomePage> {
     } catch (e) {
       print('Erro na requisição: $e');
     } finally {
-      client.close(); // Sempre bom fechar
+      client.close();
     }
   }
 
+  Future<List<dynamic>> getFeed() async {
+    var client = http.Client();
+    try {
+      http.Response? res = await client.get(
+        Uri.parse(url + '/posts'),
+        headers: {'x-session-token': token ?? ''}
+      );
+      return json.decode(res.body);
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
 
+  Future<List<dynamic>> getUsers() async {
+    var client = http.Client();
+    try {
+      http.Response? res = await client.get(
+        Uri.parse(url + '/users'),
+        headers: {'x-session-token': token ?? ''}
+      );
+      return json.decode(res.body);
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+/*
+
+      =========Widgets=========
+
+*/
 
 
   @override
@@ -83,7 +132,6 @@ class HomePageState extends State<HomePage> {
       ProfilePage(
           changePage: changePage,
           exit: exit,
-          lista: lista,
           profile: profileLoged ?? {},),
       SingUpPage(
         changePage: changePage,
@@ -114,21 +162,25 @@ class HomePageState extends State<HomePage> {
             label: 'New Post',
           ),
           NavigationDestination(
+            icon: Icon(Icons.supervised_user_circle_outlined),
+            label: 'Usuários',
+          ),
+          NavigationDestination(
             icon: Icon(Icons.account_circle_outlined),
             label: 'Perfil',
           ),
         ],
       ),
       body: <Widget>[
-        FeedPage(lista: lista, url: url, token: token ?? ''),
+        FeedPage(url: url, token: token ?? '', getFeed: getFeed),
         NewPostPage(
-          key: ValueKey(isLoged),
           goTo: goTo,
-          isLoged: isLoged,
+          token: token ?? '',
           profileLoged: profileLoged ?? {},
         ),
+        UsersPage(getUsers: getUsers, token: token ?? ''),
         pages[index]
-      ][currentPageIndex.clamp(0, 2)],
+      ][currentPageIndex.clamp(0, 3)],
     );
   }
 }
