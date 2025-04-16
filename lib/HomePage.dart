@@ -19,6 +19,7 @@ class HomePageState extends State<HomePage> {
   Map<String, dynamic>? profileLoged; // N sei se vou usar isso ainda
   String url = 'https://api.papacapim.just.pro.br';
   String? token;
+  bool flag = false;
 
 /*
 
@@ -88,7 +89,7 @@ class HomePageState extends State<HomePage> {
         changePage(1);
       }else{
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Login ou senha inválidos!")),
+          SnackBar(content: Text("Nome de usuário ou senha inválidos!")),
         );
       }
 
@@ -128,16 +129,47 @@ class HomePageState extends State<HomePage> {
   void deleteProfile() async{
     var client = http.Client();
     try {
-      await client.delete(
+      final response = await client.delete(
         Uri.parse(url + '/users/1'),
         headers: {'x-session-token': token ?? ''}
       );
+
+      if(response.statusCode == 204){
+        setState(() {
+          token = '';
+          profileLoged = {};
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Conta deletada com sucesso!")),
+        );
+        changePage(0);
+      }
     }catch(e){
       return Future.error(e.toString());
     }
   }
 
+ Future<List<dynamic>> getMyPost(String login) async {
+    var client = http.Client();
+    try {
+      final res = await client.get(
+        Uri.parse(url + '/users/' + login + '/posts'),
+        headers: {'x-session-token': token ?? ''}
+      );
+      return json.decode(res.body);
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
 
+  void newPost(){
+    var client = http.Client();
+    try{
+
+    }catch(e){
+      
+    }
+  }
 
 /*
 
@@ -155,6 +187,7 @@ class HomePageState extends State<HomePage> {
           exit: exit,
           profile: profileLoged ?? {},
           deleteProfile: deleteProfile,
+           getMyPost: getMyPost,
       ),
       SingUpPage(
         changePage: changePage,
@@ -197,6 +230,7 @@ class HomePageState extends State<HomePage> {
       body: <Widget>[
         FeedPage(url: url, token: token ?? '', getFeed: getFeed),
         NewPostPage(
+          key: Key(token ?? ''),
           goTo: goTo,
           token: token ?? '',
           profileLoged: profileLoged ?? {},

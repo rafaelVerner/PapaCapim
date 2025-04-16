@@ -37,7 +37,7 @@ class SingUpPageState extends State<SingUpPage> {
             }
           }));
       if(resp.statusCode == 201){
-         ScaffoldMessenger.of(context).showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Cadastro realizado com sucesso!")),
         );
         widget.changePage(0);
@@ -114,6 +114,7 @@ class SingUpPageState extends State<SingUpPage> {
                           }
                           return null;
                         },
+                        obscureText: true,
                       )),
                   Padding(
                       padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -134,6 +135,7 @@ class SingUpPageState extends State<SingUpPage> {
                           }
                           return null;
                         },
+                        obscureText: true,
                       ))
                 ],
               )),

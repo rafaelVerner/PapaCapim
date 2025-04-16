@@ -54,6 +54,7 @@ class LoginPageState extends State<LoginPage> {
                         decoration: InputDecoration(
                           labelText: 'Senha',
                           border: OutlineInputBorder(),
+
                         ),
                         onSaved: (value) => setState(() {
                           password = value;
@@ -64,6 +65,7 @@ class LoginPageState extends State<LoginPage> {
                           }
                           return null;
                         },
+                        obscureText: true,
                       ))
                 ],
               )),

@@ -7,7 +7,8 @@ class ProfilePage extends StatefulWidget{
   final Function() exit;
   final Function() deleteProfile;
   final Map<String, dynamic> profile;
-  const ProfilePage({super.key, required this.changePage, required this.exit, required this.profile, required this.deleteProfile });
+  final Future<List<dynamic>> Function(String) getMyPost;
+  const ProfilePage({super.key, required this.changePage, required this.exit, required this.profile, required this.deleteProfile, required this.getMyPost });
 
   @override
   State<StatefulWidget> createState() {
@@ -129,7 +130,7 @@ class ProfilePageState extends State<ProfilePage>{
                 Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 0))
                 ,
                 ElevatedButton(onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> ProfilePostPage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> ProfilePostPage(posts: widget.getMyPost(widget.profile['login'] ?? ''))));
                 }, 
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                   child: const Text("Meus posts",style: TextStyle(color: Colors.white),),
@@ -148,8 +149,26 @@ class ProfilePageState extends State<ProfilePage>{
               Padding(padding: EdgeInsets.all(10)),
               ElevatedButton(
                 onPressed: (){
-                  widget.deleteProfile();
-                  widget.changePage(0);
+                  showDialog(
+                    context: context,
+                    builder: (context){
+                        return AlertDialog(
+                          title: const Text("Deseja deletar o perfil?"),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text("Cancelar", style: TextStyle(color: Colors.red)),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                widget.deleteProfile();
+                              },
+                                child: const Text("Sim", style: TextStyle(color: Colors.green)),
+                              ),
+                          ],
+                      );
+                    }
+                   );
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                 child: const Text("Deletar conta",style: TextStyle(color: Colors.white),),
