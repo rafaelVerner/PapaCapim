@@ -5,8 +5,9 @@ import 'ProfilePostPage.dart';
 class ProfilePage extends StatefulWidget{
   final Function(int) changePage;
   final Function() exit;
+  final Function() deleteProfile;
   final Map<String, dynamic> profile;
-  const ProfilePage({super.key, required this.changePage, required this.exit, required this.profile });
+  const ProfilePage({super.key, required this.changePage, required this.exit, required this.profile, required this.deleteProfile });
 
   @override
   State<StatefulWidget> createState() {
@@ -135,16 +136,25 @@ class ProfilePageState extends State<ProfilePage>{
                 )
               ],
             ),
-            
-            Padding(padding: EdgeInsets.all(10)),
-             ElevatedButton(
-              onPressed: (){
-                widget.exit();
-                widget.changePage(0);
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
-              child: const Text("Sair",style: TextStyle(color: Colors.red),),
+            Padding(padding: EdgeInsets.all(10)),  
+            ElevatedButton(
+                onPressed: (){
+                  widget.exit();
+                  widget.changePage(0);
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
+                child: const Text("Sair",style: TextStyle(color: Colors.red),),
             ),
+              Padding(padding: EdgeInsets.all(10)),
+              ElevatedButton(
+                onPressed: (){
+                  widget.deleteProfile();
+                  widget.changePage(0);
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                child: const Text("Deletar conta",style: TextStyle(color: Colors.white),),
+              ),
+            
           ],
         ),
       ),

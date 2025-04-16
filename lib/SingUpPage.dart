@@ -18,12 +18,16 @@ class SingUpPage extends StatefulWidget {
 class SingUpPageState extends State<SingUpPage> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String? name, userName, password, passwordConfirm;
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmController = TextEditingController();
+
 
   void post(BuildContext context) async {
     var client = http.Client();
 
     try {
-      await client.post(Uri.parse(widget.url + '/users'),
+      final resp = await client.post(Uri.parse(widget.url + '/users'),
+          headers: {'Content-Type': 'application/json'},
           body: json.encode({
             "user": {
               "login": userName,
@@ -32,6 +36,16 @@ class SingUpPageState extends State<SingUpPage> {
               "password_confirmation": passwordConfirm
             }
           }));
+      if(resp.statusCode == 201){
+         ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Cadastro realizado com sucesso!")),
+        );
+        widget.changePage(0);
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Erro ao cadastrar! Verifique os dados.")),
+        );
+      }
     } catch (e) {
       log(e.toString());
     }
@@ -86,6 +100,7 @@ class SingUpPageState extends State<SingUpPage> {
                   Padding(
                       padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
                       child: TextFormField(
+                        controller: passwordController,
                         decoration: InputDecoration(
                           labelText: 'Senha',
                           border: OutlineInputBorder(),
@@ -103,6 +118,7 @@ class SingUpPageState extends State<SingUpPage> {
                   Padding(
                       padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
                       child: TextFormField(
+                        controller: confirmController,
                         decoration: InputDecoration(
                           labelText: 'Confirmar senha',
                           border: OutlineInputBorder(),
@@ -113,7 +129,7 @@ class SingUpPageState extends State<SingUpPage> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Campo obrigatório';
-                          }else if(value != password){
+                          }else if(value != passwordController.text){
                             return 'Senhas diferentes!';
                           }
                           return null;
@@ -133,7 +149,6 @@ class SingUpPageState extends State<SingUpPage> {
                         if (formKey.currentState!.validate()) {
                           formKey.currentState!.save();
                           post(context);
-                          widget.changePage(0);
                         }
                       },
                       child: Text("Cadastrar",

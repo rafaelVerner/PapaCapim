@@ -38,7 +38,7 @@ class HomePageState extends State<HomePage> {
   void exit() async{
     var client = http.Client();
     try{
-      final response = await client.delete(
+      await client.delete(
         Uri.parse(url + '/sessions/1'),
         headers: {
           'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ class HomePageState extends State<HomePage> {
         });
       
     }catch(e){
-       print('Erro na requisição: $e');
+        return Future.error(e.toString());
     }
     
   }
@@ -82,7 +82,14 @@ class HomePageState extends State<HomePage> {
           token = json.decode(response.body)['token'];
           profileLoged = json.decode(response.body);
         });
-        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Login realizado com sucesso!")),
+        );
+        changePage(1);
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Login ou senha inválidos!")),
+        );
       }
 
     } catch (e) {
@@ -118,6 +125,20 @@ class HomePageState extends State<HomePage> {
     }
   }
 
+  void deleteProfile() async{
+    var client = http.Client();
+    try {
+      await client.delete(
+        Uri.parse(url + '/users/1'),
+        headers: {'x-session-token': token ?? ''}
+      );
+    }catch(e){
+      return Future.error(e.toString());
+    }
+  }
+
+
+
 /*
 
       =========Widgets=========
@@ -132,7 +153,9 @@ class HomePageState extends State<HomePage> {
       ProfilePage(
           changePage: changePage,
           exit: exit,
-          profile: profileLoged ?? {},),
+          profile: profileLoged ?? {},
+          deleteProfile: deleteProfile,
+      ),
       SingUpPage(
         changePage: changePage,
         url: url,

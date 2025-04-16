@@ -79,7 +79,6 @@ class LoginPageState extends State<LoginPage> {
                         if (formKey.currentState!.validate()) {
                           formKey.currentState!.save();
                           widget.login(context, userName!, password!);
-                          widget.changePage(1);
                         }
                       },
                       child: Text("Entrar",
