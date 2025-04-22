@@ -8,7 +8,10 @@ class FeedPage extends StatefulWidget {
   final String url;
   final Future<List<dynamic>> Function() getFeed;
   final String token;
-  const FeedPage({super.key, required this.url, required this.token, required this.getFeed});
+  final Function(int) like;
+  final Function(int) dislike;
+  final Map<String, dynamic> profile;
+  const FeedPage({super.key, required this.url, required this.token, required this.getFeed, required this.like, required this.profile, required this.dislike});
 
   @override
   State<StatefulWidget> createState() {
@@ -82,11 +85,10 @@ class FeedPageState extends State<FeedPage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => PostPage(map: post,
-                                          )));
+                                      builder: (context) => PostPage(map: post,like: widget.like,profile: widget.profile, dislike: widget.dislike,)));
                             },
                           ))
-                        else if (post['user_login']!.toString().toLowerCase().contains(search) || post['message']!.toString().toLowerCase().contains(search))
+                        else if (post['user_login']!.toString().toLowerCase().contains(search.toLowerCase()) || post['message']!.toString().toLowerCase().contains(search.toLowerCase()))
                           Card(
                               child: ListTile(
                             title: Text(post['user_login']!),
@@ -95,8 +97,7 @@ class FeedPageState extends State<FeedPage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => PostPage(map: post,
-                                          )));
+                                      builder: (context) => PostPage(map: post,like: widget.like,profile: widget.profile,dislike: widget.dislike,)));
                             }
                               )
                           )

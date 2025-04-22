@@ -1,11 +1,13 @@
 
+
 import 'package:flutter/material.dart';
 
 
 
 class ProfilePostPage extends StatefulWidget{
   final Future<List<dynamic>> posts;
-  const ProfilePostPage({super.key, required this.posts});
+  final Function(int) deletePost;
+  const ProfilePostPage({super.key, required this.posts, required this.deletePost});
   @override
   State<StatefulWidget> createState() {
     return PostPageState();
@@ -32,11 +34,46 @@ class PostPageState extends State<ProfilePostPage>{
                   for (var post in snapshot.data!)
                     if (post.isNotEmpty)
                       Card(
-                        child: ListTile(
-                          title: Text(post['user_login']),
-                          subtitle: Text(post['message']),
-                        ),
-                      )
+                        child: 
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(padding: EdgeInsets.fromLTRB(10, 10, 0, 0), child: Text(post['user_login'] ?? '', style: TextStyle(fontSize: 18)),),
+                            Padding(padding: EdgeInsets.fromLTRB(10, 10, 0, 0), child: Text(post['message'] ?? '')),
+                            Row(
+                            children: [
+                              Spacer(),
+                              IconButton(
+                                onPressed: (){
+                                showDialog(context: context,
+                                  builder: (context){
+                                      return AlertDialog(
+                                        title: const Text("Deseja deletar o post?"),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(context),
+                                            child: const Text("Cancelar", style: TextStyle(color: Colors.red)),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              widget.deletePost(post['id']);//Cuidado com isso aqui, vai acabar com o papacapim
+                                              Navigator.pop(context);
+                                            },
+                                              child: const Text("Sim", style: TextStyle(color: Colors.green)),
+                                            ),
+                                        ],
+                                    );
+                                  });
+                                },
+                              icon: Icon(
+                                Icons.delete,
+                                size: 30,
+                                ), 
+                              ),
+                              
+                            ],
+                        )]),
+                ),
               ],
             );
             }else{

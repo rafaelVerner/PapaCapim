@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class NewPostPage extends StatefulWidget{
-
+  final Function(String) newPost;
   final Function(int) goTo;
   final Map<String, dynamic> profileLoged;
   final String token;
-  const NewPostPage({super.key, required this.goTo, required this.profileLoged, required this.token});
+  const NewPostPage({super.key, required this.goTo, required this.profileLoged, required this.token, required this.newPost});
   
   @override
   State<StatefulWidget> createState() {
@@ -23,16 +23,7 @@ String? post;
     setState(() {});
   }
 
-void _submitForm() {
-    if (formKey.currentState!.validate()) {
-      formKey.currentState!.save(); 
 
-      //if (post != null && post!.isNotEmpty) {
-        //widget.newPost(widget.profileLoged['nome']!, post!);
-      //}
-      widget.goTo(0);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +59,12 @@ void _submitForm() {
                     child:ElevatedButton(
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                       onPressed: (){
-                        _submitForm();
+                        if (formKey.currentState!.validate()) {
+                          formKey.currentState!.save(); 
+                          if (post != null && post!.isNotEmpty) {
+                            widget.newPost(post!);
+                          }
+                        }
                       }, 
                       child: Text("Enviar", style: TextStyle(color: Colors.white)))) ,
                   Padding(padding: EdgeInsets.all(10), 

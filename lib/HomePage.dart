@@ -162,12 +162,76 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-  void newPost(){
+  void newPost(message) async{
     var client = http.Client();
     try{
+      final res = await client.post(Uri.parse(url + '/posts'),
+        headers: {'x-session-token': token ?? '',
+                'Content-Type': 'application/json' },
+        body: json.encode( {'post':{'message': message}})
+      ); 
 
+      if(res.statusCode == 201){
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Menssagem enviada com sucesso!")),
+        );
+        goTo(0);
+      }
     }catch(e){
-      
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Erro ao enviar menssagem!")),
+        );
+    }
+  }
+
+  void deletePost(int id)async{
+    var client = http.Client();
+    try {
+      final response = await client.delete(
+        Uri.parse(url + '/posts/' + id.toString()),
+        headers: {'x-session-token': token ?? ''}
+      );
+
+      if(response.statusCode == 204){
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Post deletado com sucesso!")),
+        );
+        Navigator.pop(context);
+      }
+    }catch(e){
+      return Future.error(e.toString());
+    }
+  }
+
+  void like(int id)async{
+    var client = http.Client();
+    try{
+      final res = await client.post(Uri.parse(url + '/posts/'+ id.toString() + '/likes'),
+        headers: {'x-session-token': token ?? ''}
+      );
+      if(res.statusCode == 201){
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Curtido!")),
+        );
+      }
+    }catch(e){
+      return Future.error(e.toString());
+    }
+  }
+
+  void dislike(int id)async{
+    var client = http.Client();
+    try{
+      final res = await client.delete(Uri.parse(url + '/posts/'+ id.toString() + '/likes/1'),
+        headers: {'x-session-token': token ?? ''}
+      );
+      if(res.statusCode == 201){
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Deixou de curtir!")),
+        );
+      }
+    }catch(e){
+      return Future.error(e.toString());
     }
   }
 
@@ -187,7 +251,8 @@ class HomePageState extends State<HomePage> {
           exit: exit,
           profile: profileLoged ?? {},
           deleteProfile: deleteProfile,
-           getMyPost: getMyPost,
+          getMyPost: getMyPost,
+          deletePost: deletePost
       ),
       SingUpPage(
         changePage: changePage,
@@ -228,12 +293,13 @@ class HomePageState extends State<HomePage> {
         ],
       ),
       body: <Widget>[
-        FeedPage(url: url, token: token ?? '', getFeed: getFeed),
+        FeedPage(url: url, token: token ?? '', getFeed: getFeed, like: like, profile: profileLoged ?? {}, dislike: dislike,),
         NewPostPage(
           key: Key(token ?? ''),
           goTo: goTo,
           token: token ?? '',
           profileLoged: profileLoged ?? {},
+          newPost: newPost,
         ),
         UsersPage(getUsers: getUsers, token: token ?? ''),
         pages[index]
